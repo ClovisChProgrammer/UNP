@@ -6,6 +6,8 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d", { alpha: false });
 const statusEl = document.getElementById("status");
 const indicadorEl = document.getElementById("indicador");
+const textoEl = document.getElementById("texto");
+const btnTexto = document.getElementById("btn-texto");
 
 const estado = {
   cor: "#1b1b1b",
@@ -220,6 +222,8 @@ document.getElementById("btn-limpar").addEventListener("click", () => {
 });
 
 window.addEventListener("keydown", (e) => {
+  const alvo = e.target;
+  if (alvo instanceof HTMLElement && (alvo.tagName === "TEXTAREA" || alvo.tagName === "INPUT")) return;
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
     e.preventDefault();
     desfazer();
@@ -228,49 +232,104 @@ window.addEventListener("keydown", (e) => {
 
 /* ---------- Export ---------- */
 
-function baixar(extensao, mime, qualidade) {
-  if (estado.acoes.length === 0) {
-    setStatus("Nada para exportar");
-    return;
-  }
+function carimbo() {
   const agora = new Date();
-  const carimbo =
+  return (
     agora.getFullYear() +
     String(agora.getMonth() + 1).padStart(2, "0") +
     String(agora.getDate()).padStart(2, "0") +
     "_" +
     String(agora.getHours()).padStart(2, "0") +
     String(agora.getMinutes()).padStart(2, "0") +
-    String(agora.getSeconds()).padStart(2, "0");
+    String(agora.getSeconds()).padStart(2, "0")
+  );
+}
 
+function baixarBlob(blob, nome) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = nome;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+  setStatus(`Baixado: ${nome}`);
+}
+
+function baixar(extensao, mime, qualidade) {
+  if (estado.acoes.length === 0) {
+    setStatus("Nada para exportar");
+    return;
+  }
   canvas.toBlob(
     (blob) => {
       if (!blob) {
         setStatus("Falha ao gerar imagem");
         return;
       }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `unt_${carimbo}.${extensao}`;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 5000);
-      setStatus(`Baixado: ${a.download}`);
+      baixarBlob(blob, `unt_${carimbo()}.${extensao}`);
     },
     mime,
     qualidade
   );
 }
 
+function baixarTxt() {
+  const conteudo = textoEl.value.replace(/\s+$/, "");
+  if (!conteudo.trim()) {
+    setStatus("Caixa de texto vazia — nada para exportar em TXT");
+    return;
+  }
+  baixarBlob(new Blob(["\uFEFF" + conteudo], { type: "text/plain;charset=utf-8" }), `unt_${carimbo()}.txt`);
+}
+
+function baixarPdf() {
+  if (estado.acoes.length === 0) {
+    setStatus("Nada para exportar");
+    return;
+  }
+  canvas.toBlob(
+    async (blob) => {
+      if (!blob) {
+        setStatus("Falha ao gerar imagem");
+        return;
+      }
+      try {
+        const jpeg = new Uint8Array(await blob.arrayBuffer());
+        const larguraPt = (canvas.width / dpr) * 0.75;
+        const alturaPt = (canvas.height / dpr) * 0.75;
+        const pdf = UNT_PDF.gerarPdfJpeg(jpeg, canvas.width, canvas.height, larguraPt, alturaPt);
+        baixarBlob(new Blob([pdf], { type: "application/pdf" }), `unt_${carimbo()}.pdf`);
+      } catch (erro) {
+        console.error(erro);
+        setStatus("Falha ao gerar PDF");
+      }
+    },
+    "image/jpeg",
+    0.95
+  );
+}
+
+function alternarTexto(mostrar) {
+  const visivel = typeof mostrar === "boolean" ? mostrar : textoEl.classList.contains("oculto");
+  textoEl.classList.toggle("oculto", !visivel);
+  btnTexto.classList.toggle("ativa", visivel);
+  if (visivel) textoEl.focus();
+  setStatus(visivel ? "Digite o texto — exporte com TXT" : "Caixa de texto oculta");
+}
+
+btnTexto.addEventListener("click", () => alternarTexto());
+
+document.getElementById("btn-txt").addEventListener("click", baixarTxt);
 document.getElementById("btn-png").addEventListener("click", () => baixar("png", "image/png"));
 document.getElementById("btn-jpg").addEventListener("click", () => baixar("jpg", "image/jpeg", 0.92));
+document.getElementById("btn-pdf").addEventListener("click", baixarPdf);
 
 /* ---------- Painel ↔ aba (etapa 1) ---------- */
 
 if (ehPainel) {
   chrome.runtime.onMessage.addListener((mensagem, _remetente, responder) => {
     if (mensagem?.tipo === "unt-pedir-estado") {
-      responder({ acoes: estado.acoes });
+      responder({ acoes: estado.acoes, texto: textoEl.value });
       return true;
     }
   });
@@ -286,13 +345,24 @@ if (ehPainel) {
   chrome.storage.session
     .get("unt-estado-transferido")
     .then((dados) => {
-      const acoes = dados["unt-estado-transferido"];
-      if (Array.isArray(acoes) && acoes.length > 0) {
-        estado.acoes = acoes;
+      const bruto = dados["unt-estado-transferido"];
+      if (!bruto) return;
+      const transferido = Array.isArray(bruto) ? { acoes: bruto, texto: "" } : bruto;
+      let copiou = false;
+      if (Array.isArray(transferido.acoes) && transferido.acoes.length > 0) {
+        estado.acoes = transferido.acoes;
         refazerTudo();
+        copiou = true;
+      }
+      if (typeof transferido.texto === "string" && transferido.texto.trim()) {
+        textoEl.value = transferido.texto;
+        alternarTexto(true);
+        copiou = true;
+      }
+      if (copiou) {
         setStatus("Rascunho copiado do painel — painel e aba seguem independentes");
       }
-      if (acoes) return chrome.storage.session.remove("unt-estado-transferido");
+      return chrome.storage.session.remove("unt-estado-transferido");
     })
     .catch(() => {});
 }

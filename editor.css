@@ -45,6 +45,8 @@ body {
 .acoes {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .btn-export {
@@ -60,6 +62,12 @@ body {
 
 .btn-export:hover {
   background: #3a4150;
+}
+
+.btn-export.ativa {
+  background: var(--destaque);
+  border-color: var(--destaque);
+  color: #fff;
 }
 
 .ferramentas {
@@ -171,6 +179,30 @@ body {
   touch-action: none;
   cursor: crosshair;
   background: var(--canvas);
+}
+
+.texto {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 38%;
+  width: 100%;
+  resize: none;
+  border: none;
+  border-top: 2px solid var(--destaque);
+  background: #fffef8;
+  color: #1b1b1b;
+  padding: 8px 10px;
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+  z-index: 2;
+}
+
+.oculto {
+  display: none !important;
 }
 
 .rodape {

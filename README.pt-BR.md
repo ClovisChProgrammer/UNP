@@ -2,7 +2,7 @@
 
 [English](README.md) · **Português (BR)** · [Español](README.es.md)
 
-![Versão](https://img.shields.io/badge/vers%C3%A3o-0.2.0-blue)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-0.3.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -28,8 +28,9 @@ coisa em 2 segundos, sem abrir outro programa.
 - **Escrita à mão com pressão** — a espessura do traço varie conforme a pressão da caneta
 - **Palm rejection** — a palma da mão/tocaço não apaga nem desenha enquanto a caneta está em uso
 - **Tela cheia** — botão *↗ Tela cheia* ou atalho `Ctrl+Shift+U` abre o editor em aba própria
+- **Caixa de texto** — botão *Texto* mostra uma área para datilografar notas (Ctrl+Z desfaz dentro dela)
 - **Ferramentas essenciais** — 3 cores, 2 espessuras, borracha, desfazer (`Ctrl+Z`) e limpar
-- **Export PNG e JPG** — um clique baixa a imagem com nome e hora
+- **Export em 4 formatos** — `PNG`, `JPG`, `PDF` (página única) e `TXT` (o texto digitado), todos com um clique
 - **100% offline** — funciona sem internet; nenhum dado é coletado ou enviado
 
 ## Requisitos
@@ -59,11 +60,14 @@ coisa em 2 segundos, sem abrir outro programa.
 | Desfazer | **Desfazer** ou `Ctrl+Z` |
 | Limpar tudo | **Limpar** (também desfazível com `Ctrl+Z`) |
 | Tela cheia | Botão **↗ Tela cheia** ou `Ctrl+Shift+U` |
+| Digitar texto | Botão **Texto** (mostra a área de texto) |
+| Baixar o texto como TXT | Botão **TXT** |
+| Baixar o desenho como PDF | Botão **PDF** (página única) |
 | Baixar imagem | Botões **PNG** ou **JPG** |
 
-**Tela cheia:** se o painel está aberto com um desenho, ao entrar na aba o desenho é
-**copiado uma vez** para a tela cheia (aviso aparece no rodapé). Depois disso, painel e
-aba seguem independentes — desenhar em um não altera o outro.
+**Tela cheia:** se o painel está aberto com um desenho (e/ou texto), ao entrar na aba o
+conteúdo é **copiado uma vez** para a tela cheia (aviso aparece no rodapé). Depois disso,
+painel e aba seguem independentes — desenhar em um não altera o outro.
 
 O atalho `Ctrl+Shift+U` pode ser reconfigurado em `chrome://extensions/shortcuts`.
 
@@ -74,17 +78,19 @@ O atalho `Ctrl+Shift+U` pode ser reconfigurado em `chrome://extensions/shortcuts
 - Permissões usadas: `sidePanel` (painel lateral) e `storage` (guardar preferências locais)
 - O código é aberto — audite à vontade
 
-## Limitações conhecidas (v0.2)
+## Limitações conhecidas (v0.3)
 
 - O desenho não é salvo entre sessões do Chrome (salvar rascunhos está no roadmap)
 - Ao redimensionar o painel, o desenho fica no canto superior esquerdo sem distorção
-- Export em PDF e OCR (texto manuscrito → texto) ainda não disponíveis
+- A caixa de texto é uma "camada" sobre a parte inferior do desenho (não divide a tela)
+- O PDF é uma página com a imagem do desenho (não selecionável)
+- OCR (texto manuscrito → texto) ainda não disponível
 
 ## Roadmap
 
 - [x] Painel lateral com caneta e pressão
 - [x] Tela cheia em aba (`Ctrl+Shift+U`)
-- [ ] Export em TXT e PDF
+- [x] Export TXT e PDF
 - [ ] OCR manuscrito → texto (processado localmente)
 - [ ] Salvar rascunhos entre sessões
 - [ ] Publicação na Chrome Web Store

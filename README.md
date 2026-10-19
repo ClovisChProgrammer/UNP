@@ -2,7 +2,7 @@
 
 **English** · [Português (BR)](README.pt-BR.md) · [Español](README.es.md)
 
-![Version](https://img.shields.io/badge/version-0.2.0-blue)
+![Version](https://img.shields.io/badge/version-0.3.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -28,8 +28,9 @@ jot something down in 2 seconds without opening another program.
 - **Pressure-sensitive ink** — stroke width follows your pen's pressure
 - **Palm rejection** — your palm won't draw or erase while the pen is in use
 - **Full screen** — the *↗ Full screen* button or `Ctrl+Shift+U` opens the editor in its own tab
+- **Text box** — the *Text* button reveals a typing area (Ctrl+Z undoes edits inside it)
 - **Essential tools** — 3 colors, 2 widths, eraser, undo (`Ctrl+Z`) and clear
-- **PNG & JPG export** — one click downloads a timestamped image
+- **4 export formats** — `PNG`, `JPG`, `PDF` (single page) and `TXT` (typed text), one click each
 - **100% offline** — works without internet; nothing is collected or sent anywhere
 
 ## Requirements
@@ -59,11 +60,14 @@ jot something down in 2 seconds without opening another program.
 | Undo | **Undo** or `Ctrl+Z` |
 | Clear all | **Clear** (also undoable with `Ctrl+Z`) |
 | Full screen | **↗ Full screen** button or `Ctrl+Shift+U` |
+| Type text | **Text** button (reveals the text area) |
+| Download text as TXT | **TXT** button |
+| Download drawing as PDF | **PDF** button (single page) |
 | Download image | **PNG** or **JPG** buttons |
 
-**Full screen:** if the panel holds a drawing when you open the tab, the drawing is
-**copied once** into the full-screen editor (a notice appears in the footer). After
-that, panel and tab are independent — drawing in one does not change the other.
+**Full screen:** if the panel holds a drawing (and/or text) when you open the tab, the
+content is **copied once** into the full-screen editor (a notice appears in the footer).
+After that, panel and tab are independent — drawing in one does not change the other.
 
 The `Ctrl+Shift+U` shortcut can be remapped at `chrome://extensions/shortcuts`.
 
@@ -74,20 +78,31 @@ The `Ctrl+Shift+U` shortcut can be remapped at `chrome://extensions/shortcuts`.
 - Permissions used: `sidePanel` (the panel) and `storage` (local preferences)
 - The code is open — audit freely
 
-## Known limitations (v0.2)
+## Known limitations (v0.3)
 
 - Drawings are not persisted between Chrome sessions (saving is on the roadmap)
 - When the panel is resized, the drawing is kept undistorted in the top-left corner
-- PDF export and OCR (handwriting → text) are not available yet
+- The text box is an overlay on the lower part of the canvas (it does not split the view)
+- The PDF is a single page with the drawing as an image (not selectable text)
+- OCR (handwriting → text) is not available yet
 
 ## Roadmap
 
 - [x] Side panel with pressure-sensitive pen input
 - [x] Full-screen tab mode (`Ctrl+Shift+U`)
-- [ ] TXT and PDF export
+- [x] TXT and PDF export
 - [ ] OCR handwriting → text (processed locally)
 - [ ] Persist drawings between sessions
 - [ ] Chrome Web Store publication
+
+## Smoke checklist — step 2 (TXT + PDF export)
+
+- [ ] **Text** button toggles the text box; typing works and Ctrl+Z undoes inside the box
+- [ ] **TXT** downloads a `.txt` with the typed text (accents preserved)
+- [ ] **PDF** downloads `unt_<stamp>.pdf` that opens with the drawing visible
+- [ ] PDF page size matches the editor (no cropping or distortion)
+- [ ] With an empty canvas, PDF shows "Nothing to export" (no file)
+- [ ] `npm test` passes (pdf generator unit tests)
 
 ## License
 

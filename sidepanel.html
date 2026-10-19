@@ -10,9 +10,12 @@
   <header class="barra">
     <span class="marca">UNT</span>
     <div class="acoes">
+      <button id="btn-texto" class="btn-export" title="Mostrar/ocultar caixa de texto (exporta em TXT)">Texto</button>
       <button id="btn-aba" class="btn-export" title="Abrir em aba (tela cheia) — Ctrl+Shift+U">↗ Tela cheia</button>
+      <button id="btn-txt" class="btn-export" title="Baixar o texto como TXT">TXT</button>
       <button id="btn-png" class="btn-export" title="Baixar como PNG">PNG</button>
       <button id="btn-jpg" class="btn-export" title="Baixar como JPG">JPG</button>
+      <button id="btn-pdf" class="btn-export" title="Baixar como PDF">PDF</button>
     </div>
   </header>
 
@@ -37,6 +40,12 @@
 
   <main class="area-desenho">
     <canvas id="canvas"></canvas>
+    <textarea
+      id="texto"
+      class="texto oculto"
+      spellcheck="false"
+      placeholder="Digite aqui — o texto é exportado no .txt"
+    ></textarea>
   </main>
 
   <footer class="rodape">
@@ -44,6 +53,7 @@
     <span id="indicador"></span>
   </footer>
 
+  <script src="pdf.js"></script>
   <script src="editor.js"></script>
 </body>
 </html>
