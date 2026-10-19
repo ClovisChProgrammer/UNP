@@ -9,6 +9,10 @@ const indicadorEl = document.getElementById("indicador");
 const textoEl = document.getElementById("texto");
 const btnTexto = document.getElementById("btn-texto");
 const btnApagar = document.getElementById("btn-apagar");
+const btnOcr = document.getElementById("btn-ocr");
+const painelOcr = document.getElementById("ocr");
+const saidaOcr = document.getElementById("ocr-saida");
+const infoOcr = document.getElementById("ocr-info");
 
 const estado = {
   cor: "#1b1b1b",
@@ -325,6 +329,99 @@ function alternarTexto(mostrar) {
 
 btnTexto.addEventListener("click", () => alternarTexto());
 textoEl.addEventListener("input", agendarSalvar);
+
+/* ---------- OCR (etapa 5) ---------- */
+
+let ocrRodando = false;
+
+function rotuloProgresso(msg) {
+  const status = msg?.status || "";
+  const pct = Math.round((msg?.progress || 0) * 100);
+  const mapa = {
+    "loading tesseract core": "Carregando motor OCR",
+    "initializing tesseract": "Inicializando motor OCR",
+    "loading language traineddata": "Carregando idioma",
+    "initializing api": "Preparando reconhecimento",
+    "recognizing text": "Reconhecendo",
+  };
+  const texto = mapa[status] || status || "Processando";
+  return `${texto}… ${pct}%`;
+}
+
+async function rodarOcr() {
+  if (ocrRodando) return;
+  if (estado.acoes.length === 0) {
+    setStatus("Nada para reconhecer — desenhe algo primeiro");
+    return;
+  }
+  ocrRodando = true;
+  painelOcr.classList.remove("oculto");
+  saidaOcr.value = "";
+  infoOcr.textContent = "Vetorizando o desenho…";
+  btnOcr.classList.add("ativa");
+  setStatus("OCR em andamento (100% local)…");
+
+  try {
+    const resultado = await window.UNT_OCR_PIPELINE.reconhecer(canvas, "por+eng", (m) => {
+      infoOcr.textContent = rotuloProgresso(m);
+    });
+    if (resultado.vazio) {
+      saidaOcr.value = "";
+      infoOcr.textContent = "Nenhum traço encontrado para reconhecer.";
+    } else {
+      saidaOcr.value = resultado.texto;
+      const conf = resultado.confianca != null ? ` · confiança ${Math.round(resultado.confianca)}%` : "";
+      infoOcr.textContent = resultado.texto
+        ? `Pronto${conf} — revise antes de usar`
+        : "Não foi possível ler o texto — tente letra de forma, maior e mais espaçada.";
+    }
+    setStatus("OCR concluído");
+  } catch (erro) {
+    console.error(erro);
+    infoOcr.textContent = "Falha no OCR (motor ou arquivos indisponíveis).";
+    setStatus("Falha no OCR");
+  } finally {
+    ocrRodando = false;
+    btnOcr.classList.remove("ativa");
+  }
+}
+
+function fecharOcr() {
+  painelOcr.classList.add("oculto");
+}
+
+btnOcr.addEventListener("click", rodarOcr);
+
+document.getElementById("ocr-copiar").addEventListener("click", async () => {
+  const texto = saidaOcr.value;
+  if (!texto.trim()) {
+    setStatus("Nada para copiar");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(texto);
+    setStatus("Texto copiado");
+  } catch {
+    saidaOcr.select();
+    document.execCommand("copy");
+    setStatus("Texto copiado");
+  }
+});
+
+document.getElementById("ocr-para-texto").addEventListener("click", () => {
+  const texto = saidaOcr.value;
+  if (!texto.trim()) {
+    setStatus("Nada para enviar");
+    return;
+  }
+  textoEl.value = texto;
+  fecharOcr();
+  alternarTexto(true);
+  agendarSalvar();
+  setStatus("Texto do OCR enviado para a caixa de texto");
+});
+
+document.getElementById("ocr-fechar").addEventListener("click", fecharOcr);
 
 document.getElementById("btn-txt").addEventListener("click", baixarTxt);
 document.getElementById("btn-png").addEventListener("click", () => baixar("png", "image/png"));

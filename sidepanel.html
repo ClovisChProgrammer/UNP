@@ -12,6 +12,7 @@
     <div class="acoes">
       <button id="btn-texto" class="btn-export" title="Mostrar/ocultar caixa de texto (exporta em TXT)">Texto</button>
       <button id="btn-aba" class="btn-export" title="Abrir em aba (tela cheia) — Ctrl+Shift+U">↗ Tela cheia</button>
+      <button id="btn-ocr" class="btn-export" title="Reconhecer o texto manuscrito (offline)">OCR</button>
       <button id="btn-txt" class="btn-export" title="Baixar o texto como TXT">TXT</button>
       <button id="btn-png" class="btn-export" title="Baixar como PNG">PNG</button>
       <button id="btn-jpg" class="btn-export" title="Baixar como JPG">JPG</button>
@@ -47,6 +48,18 @@
       spellcheck="false"
       placeholder="Digite aqui — o texto é exportado no .txt"
     ></textarea>
+    <section id="ocr" class="ocr oculto" aria-label="Resultado do OCR">
+      <header class="ocr-topo">
+        <strong>Texto reconhecido (OCR)</strong>
+        <div class="ocr-botoes">
+          <button id="ocr-copiar" class="ferramenta" title="Copiar para a área de transferência">Copiar</button>
+          <button id="ocr-para-texto" class="ferramenta" title="Enviar para a caixa de texto">→ Texto</button>
+          <button id="ocr-fechar" class="ferramenta perigo" title="Fechar">Fechar</button>
+        </div>
+      </header>
+      <textarea id="ocr-saida" class="ocr-saida" spellcheck="false" placeholder="O texto reconhecido aparece aqui"></textarea>
+      <p id="ocr-info" class="ocr-info"></p>
+    </section>
   </main>
 
   <footer class="rodape">
@@ -55,6 +68,9 @@
   </footer>
 
   <script src="pdf.js"></script>
+  <script src="ocr.js"></script>
+  <script src="vendor/tesseract/tesseract.min.js"></script>
+  <script src="ocr-pipeline.js"></script>
   <script src="editor.js"></script>
 </body>
 </html>

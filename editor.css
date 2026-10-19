@@ -205,6 +205,58 @@ body {
   display: none !important;
 }
 
+.ocr {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #ffffff;
+  border: 2px solid var(--destaque);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  z-index: 4;
+}
+
+.ocr-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: #1b1b1b;
+}
+
+.ocr-botoes {
+  display: flex;
+  gap: 5px;
+}
+
+.ocr-saida {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  padding: 8px;
+  font: 13px/1.45 "Segoe UI", system-ui, sans-serif;
+  color: #1b1b1b;
+  background: #fffef8;
+  user-select: text;
+  -webkit-user-select: text;
+  outline: none;
+}
+
+.ocr-info {
+  font-size: 10px;
+  color: var(--texto-fraco);
+  min-height: 12px;
+}
+
 .rodape {
   display: flex;
   justify-content: space-between;

@@ -2,7 +2,7 @@
 
 [English](README.md) · [Português (BR)](README.pt-BR.md) · **Español**
 
-![Versión](https://img.shields.io/badge/versi%C3%B3n-0.4.0-blue)
+![Versión](https://img.shields.io/badge/versi%C3%B3n-0.5.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
 ![Sin conexión](https://img.shields.io/badge/100%25-sin%20conexi%C3%B3n-brightgreen)
@@ -33,6 +33,7 @@ anotar algo en 2 segundos sin abrir otro programa.
 - **Herramientas esenciales** — 3 colores, 2 grosores, borrador, deshacer (`Ctrl+Z`) y limpiar
 - **4 formatos de exportación** — `PNG`, `JPG`, `PDF` (una página) y `TXT` (el texto escrito), con un clic cada uno
 - **Borrador guardado automáticamente** — lo que dibujas o escribes se conserva y vuelve al reabrir Chrome
+- **OCR sin conexión (experimental)** — reconoce el texto de tu dibujo sin enviar nada a la nube (Tesseract incluido)
 - **100% sin conexión** — funciona sin internet; no se recopila ni se envía nada
 
 ## Requisitos
@@ -68,6 +69,7 @@ anotar algo en 2 segundos sin abrir otro programa.
 | Descargar el dibujo como PDF | Botón **PDF** (una página) |
 | Descargar imagen | Botones **PNG** o **JPG** |
 | Borrar el borrador guardado | Botón **Borrar borrador** (limpia el lienzo y no vuelve solo) |
+| Reconocer el texto del dibujo | Botón **OCR** (abre el panel con el texto reconocido) |
 
 **Pantalla completa:** si el panel tiene un dibujo (y/o texto) al abrir la pestaña, el
 contenido se **copia una vez** al editor en pantalla completa (aparece un aviso en el
@@ -79,21 +81,30 @@ El atajo `Ctrl+Shift+U` se puede reconfigurar en `chrome://extensions/shortcuts`
 y se restauran al reabrir el panel o Chrome. No hay botón "Guardar" — escribe y olvídate.
 El botón **Borrar borrador** limpia el lienzo **y** lo que estaba guardado.
 
+**OCR (experimental):** el botón **OCR** reconoce el texto del dibujo con el motor
+Tesseract **incluido en la extensión** — el procesamiento es 100% local, no se envía nada.
+El panel muestra el texto, una confianza estimada y botones **Copiar** y **→ Texto**
+(lo envía a la caja de texto). Funciona bien con **texto impreso y letra de molde**;
+**la cursiva conectada tiene baja precisión** (limitación del propio Tesseract, no de la
+extensión). Revisa siempre el resultado antes de usarlo.
+
 ## Privacidad
 
 - **Cero recopilación de datos.** La extensión no envía nada a ningún servidor — no existe
 - **100% sin conexión.** Sin permiso de red, sin rastreo, sin cookies
 - Permisos usados: `sidePanel` (el panel) y `storage` (preferencias locales)
 - Tus borradores viven **solo en tu navegador** (`chrome.storage.local`) — nada va a la nube
+- El OCR se ejecuta en tu equipo con el motor Tesseract incluido — **ninguna imagen se sube**
 - El código es abierto — audítalo libremente
 
-## Limitaciones conocidas (v0.4)
+## Limitaciones conocidas (v0.5)
 
 - Al redimensionar el panel, el dibujo se mantiene sin distorsión en la esquina superior izquierda
 - La caja de texto es una capa sobre la parte inferior del lienzo (no divide la vista)
 - El PDF es una página con el dibujo como imagen (no es texto seleccionable)
 - Los borradores muy grandes (más de ~8 MB) no se guardan — exporta como imagen en ese caso
-- El OCR (manuscrito → texto) aún no está disponible
+- **OCR:** excelente con texto impreso y letra de molde; **malo con cursiva conectada**
+  (limitación del Tesseract). El primer OCR carga el motor (~1–2 s)
 
 ## Roadmap
 
@@ -101,7 +112,7 @@ El botón **Borrar borrador** limpia el lienzo **y** lo que estaba guardado.
 - [x] Modo pestaña a pantalla completa (`Ctrl+Shift+U`)
 - [x] Exportación TXT y PDF
 - [x] Borradores guardados automáticamente (se restauran al reabrir)
-- [ ] OCR manuscrito → texto (procesado localmente)
+- [x] OCR sin conexión del dibujo (Tesseract incluido; impreso/molde)
 - [ ] Publicación en Chrome Web Store
 
 ## Licencia

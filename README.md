@@ -2,7 +2,7 @@
 
 **English** · [Português (BR)](README.pt-BR.md) · [Español](README.es.md)
 
-![Version](https://img.shields.io/badge/version-0.4.0-blue)
+![Version](https://img.shields.io/badge/version-0.5.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -32,6 +32,7 @@ jot something down in 2 seconds without opening another program.
 - **Essential tools** — 3 colors, 2 widths, eraser, undo (`Ctrl+Z`) and clear
 - **4 export formats** — `PNG`, `JPG`, `PDF` (single page) and `TXT` (typed text), one click each
 - **Auto-saved scratchpad** — whatever you draw or type is kept and restored when you reopen Chrome
+- **Offline OCR (experimental)** — reads the text in your drawing without sending anything to the cloud (bundled Tesseract)
 - **100% offline** — works without internet; nothing is collected or sent anywhere
 
 ## Requirements
@@ -66,6 +67,7 @@ jot something down in 2 seconds without opening another program.
 | Download drawing as PDF | **PDF** button (single page) |
 | Download image | **PNG** or **JPG** buttons |
 | Delete the saved draft | **Delete draft** button (clears the canvas and stays gone) |
+| Recognize text in the drawing | **OCR** button (opens the panel with the recognized text) |
 
 **Full screen:** if the panel holds a drawing (and/or text) when you open the tab, the
 content is **copied once** into the full-screen editor (a notice appears in the footer).
@@ -77,21 +79,30 @@ The `Ctrl+Shift+U` shortcut can be remapped at `chrome://extensions/shortcuts`.
 restored when you reopen the panel or Chrome. There is no "Save" button — just write
 and forget. The **Delete draft** button clears the canvas **and** the stored draft.
 
+**OCR (experimental):** the **OCR** button reads the text in your drawing with the
+Tesseract engine **bundled inside the extension** — processing is 100% local, nothing is
+sent. The panel shows the text, an estimated confidence and **Copy** / **→ Text** buttons
+(sends it to the text box). It works well on **printed text and block letters**;
+**connected cursive is poor** (a Tesseract limitation, not the extension's). Always
+review the result before using it.
+
 ## Privacy
 
 - **Zero data collection.** The extension sends nothing to any server — there is none
 - **100% offline.** No network permission, no tracking, no cookies
 - Permissions used: `sidePanel` (the panel) and `storage` (local preferences)
 - Your drafts live **only in your browser** (`chrome.storage.local`) — nothing goes to the cloud
+- OCR runs on your machine with the bundled Tesseract engine — **no image is ever uploaded**
 - The code is open — audit freely
 
-## Known limitations (v0.4)
+## Known limitations (v0.5)
 
 - When the panel is resized, the drawing is kept undistorted in the top-left corner
 - The text box is an overlay on the lower part of the canvas (it does not split the view)
 - The PDF is a single page with the drawing as an image (not selectable text)
 - Very large drafts (above ~8 MB) are not saved — export as an image in that case
-- OCR (handwriting → text) is not available yet
+- **OCR:** great on printed text and block letters; **poor on connected cursive**
+  (a Tesseract limitation). The first OCR run loads the engine (~1–2 s)
 
 ## Roadmap
 
@@ -99,7 +110,7 @@ and forget. The **Delete draft** button clears the canvas **and** the stored dra
 - [x] Full-screen tab mode (`Ctrl+Shift+U`)
 - [x] TXT and PDF export
 - [x] Auto-saved drafts (restored on reopen)
-- [ ] OCR handwriting → text (processed locally)
+- [x] Offline OCR of the drawing (bundled Tesseract; printed/block)
 - [ ] Chrome Web Store publication
 
 ## Smoke checklist — step 2 (TXT + PDF export)
@@ -120,6 +131,15 @@ and forget. The **Delete draft** button clears the canvas **and** the stored dra
 - [ ] **Delete draft** clears canvas + text and stays empty after reopening
 - [ ] Draw in panel, open the tab → copy works; panel redraws persist independently
 - [ ] Undo and Clear are also auto-saved
+
+## Smoke checklist — step 5 (offline OCR)
+
+- [ ] First **OCR** click loads the engine locally (progress "Loading OCR engine…") — no network
+- [ ] Printed text and BLOCK letters are recognized correctly (~90%+ confidence)
+- [ ] Connected cursive returns poor results (expected — documented limitation)
+- [ ] **Copy** puts the text on the clipboard; **→ Text** sends it to the text box
+- [ ] **Close** hides the panel; empty canvas shows a clear "nothing to recognize" message
+- [ ] Works with DevTools offline mode ON (proves no CDN dependency)
 
 ## License
 

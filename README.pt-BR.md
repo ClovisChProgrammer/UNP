@@ -2,7 +2,7 @@
 
 [English](README.md) · **Português (BR)** · [Español](README.es.md)
 
-![Versão](https://img.shields.io/badge/vers%C3%A3o-0.4.0-blue)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-0.5.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -32,6 +32,7 @@ coisa em 2 segundos, sem abrir outro programa.
 - **Ferramentas essenciais** — 3 cores, 2 espessuras, borracha, desfazer (`Ctrl+Z`) e limpar
 - **Export em 4 formatos** — `PNG`, `JPG`, `PDF` (página única) e `TXT` (o texto digitado), todos com um clique
 - **Rascunho salvo automaticamente** — o que você escreve ou digita fica guardado e volta ao reabrir o Chrome
+- **OCR offline (experimental)** — reconhece o texto do desenho sem enviar nada para a nuvem (Tesseract embutido)
 - **100% offline** — funciona sem internet; nenhum dado é coletado ou enviado
 
 ## Requisitos
@@ -66,6 +67,7 @@ coisa em 2 segundos, sem abrir outro programa.
 | Baixar o desenho como PDF | Botão **PDF** (página única) |
 | Baixar imagem | Botões **PNG** ou **JPG** |
 | Apagar o rascunho salvo | Botão **Apagar rascunho** (zera a tela e não volta sozinho) |
+| Reconhecer o texto do desenho | Botão **OCR** (abre o painel com o texto reconhecido) |
 
 **Tela cheia:** se o painel está aberto com um desenho (e/ou texto), ao entrar na aba o
 conteúdo é **copiado uma vez** para a tela cheia (aviso aparece no rodapé). Depois disso,
@@ -77,21 +79,30 @@ O atalho `Ctrl+Shift+U` pode ser reconfigurado em `chrome://extensions/shortcuts
 atraso) e restaurados quando você reabre o painel ou o Chrome. Não há botão "Salvar" —
 escreva e esqueça. O botão **Apagar rascunho** limpa a tela **e** o que estava guardado.
 
+**OCR (experimental):** o botão **OCR** reconhece o texto do desenho usando o motor
+Tesseract **embutido na extensão** — o processamento é 100% local, nada é enviado.
+O painel mostra o texto, a confiança estimada e botões **Copiar** e **→ Texto** (envia
+para a caixa de texto). Funciona bem com **texto impresso e letra de forma (bloco)**;
+**escrita cursiva conectada tem baixa precisão** (limitação do próprio Tesseract, não da
+extensão). Sempre revise o resultado antes de usar.
+
 ## Privacidade
 
 - **Zero coleta de dados.** A extensão não envia nada para servidores — não há servidor
 - **100% offline.** Nenhuma permissão de rede, nenhum rastreamento, nenhum cookie
 - Permissões usadas: `sidePanel` (painel lateral) e `storage` (guardar preferências locais)
 - Seus rascunhos ficam **apenas no seu navegador** (`chrome.storage.local`) — nada vai para a nuvem
+- O OCR roda no seu computador com o motor Tesseract embutido — **nenhuma imagem é enviada**
 - O código é aberto — audite à vontade
 
-## Limitações conhecidas (v0.4)
+## Limitações conhecidas (v0.5)
 
 - Ao redimensionar o painel, o desenho fica no canto superior esquerdo sem distorção
 - A caixa de texto é uma "camada" sobre a parte inferior do desenho (não divide a tela)
 - O PDF é uma página com a imagem do desenho (não selecionável)
 - Rascunhos muito grandes (acima de ~8 MB) não são salvos — exporte como imagem nesse caso
-- OCR (texto manuscrito → texto) ainda não disponível
+- **OCR:** excelente em texto impresso e letra de forma; **ruim em cursivo conectado**
+  (limitação do Tesseract). O primeiro OCR carrega o motor (~1–2 s) e o pacote de idiomas
 
 ## Roadmap
 
@@ -99,7 +110,7 @@ escreva e esqueça. O botão **Apagar rascunho** limpa a tela **e** o que estava
 - [x] Tela cheia em aba (`Ctrl+Shift+U`)
 - [x] Export TXT e PDF
 - [x] Salvar rascunhos (automático, com restaurar ao reabrir)
-- [ ] OCR manuscrito → texto (processado localmente)
+- [x] OCR offline do desenho (Tesseract embutido; impresso/bloco)
 - [ ] Publicação na Chrome Web Store
 
 ## Licença
