@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate Note Pad</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <header class="barra">
+    <span class="marca">UNT</span>
+    <div class="acoes">
+      <button id="btn-png" class="btn-export" title="Baixar como PNG">PNG</button>
+      <button id="btn-jpg" class="btn-export" title="Baixar como JPG">JPG</button>
+    </div>
+  </header>
+
+  <nav class="ferramentas" aria-label="Ferramentas de desenho">
+    <div class="grupo cores" role="group" aria-label="Cor">
+      <button class="cor ativa" data-cor="#1b1b1b" style="--cor:#1b1b1b" title="Preto"></button>
+      <button class="cor" data-cor="#1565c0" style="--cor:#1565c0" title="Azul"></button>
+      <button class="cor" data-cor="#c62828" style="--cor:#c62828" title="Vermelho"></button>
+    </div>
+
+    <div class="grupo espessuras" role="group" aria-label="Espessura">
+      <button class="espessura ativa" data-esp="2.2" title="Fina"><span class="ponto p-fina"></span></button>
+      <button class="espessura" data-esp="5" title="Grossa"><span class="ponto p-grossa"></span></button>
+    </div>
+
+    <div class="grupo">
+      <button id="btn-borracha" class="ferramenta" title="Borracha (apaga com o fundo branco)">Borracha</button>
+      <button id="btn-desfazer" class="ferramenta" title="Desfazer (Ctrl+Z)">Desfazer</button>
+      <button id="btn-limpar" class="ferramenta perigo" title="Limpar tudo">Limpar</button>
+    </div>
+  </nav>
+
+  <main class="area-desenho">
+    <canvas id="canvas"></canvas>
+  </main>
+
+  <footer class="rodape">
+    <span id="status">Pronto — escreva com a caneta</span>
+    <span id="indicador"></span>
+  </footer>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
