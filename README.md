@@ -102,7 +102,9 @@ review the result before using it.
 - The PDF is a single page with the drawing as an image (not selectable text)
 - Very large drafts (above ~8 MB) are not saved — export as an image in that case
 - **OCR:** great on printed text and block letters; **poor on connected cursive**
-  (a Tesseract limitation). The first OCR run loads the engine (~1–2 s)
+  and **cannot read math symbols** (`+`, `^`, `=` are absent from the model — a
+  Tesseract limitation, not a bug). The first OCR run loads the engine (~1–2 s).
+  See [ADR-0001](docs/adr/0001-limites-do-ocr.md) for the full analysis.
 
 ## Roadmap
 

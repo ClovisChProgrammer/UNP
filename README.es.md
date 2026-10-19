@@ -104,7 +104,9 @@ extensión). Revisa siempre el resultado antes de usarlo.
 - El PDF es una página con el dibujo como imagen (no es texto seleccionable)
 - Los borradores muy grandes (más de ~8 MB) no se guardan — exporta como imagen en ese caso
 - **OCR:** excelente con texto impreso y letra de molde; **malo con cursiva conectada**
-  (limitación del Tesseract). El primer OCR carga el motor (~1–2 s)
+  y **no lee símbolos matemáticos** (`+`, `^`, `=` no existen en el modelo — limitación
+  del Tesseract, no es un bug). El primer OCR carga el motor (~1–2 s).
+  Ver [ADR-0001](docs/adr/0001-limites-do-ocr.md) para el análisis completo.
 
 ## Roadmap
 

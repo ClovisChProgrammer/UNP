@@ -102,7 +102,9 @@ extensão). Sempre revise o resultado antes de usar.
 - O PDF é uma página com a imagem do desenho (não selecionável)
 - Rascunhos muito grandes (acima de ~8 MB) não são salvos — exporte como imagem nesse caso
 - **OCR:** excelente em texto impresso e letra de forma; **ruim em cursivo conectado**
-  (limitação do Tesseract). O primeiro OCR carrega o motor (~1–2 s) e o pacote de idiomas
+  e **não lê símbolos matemáticos** (`+`, `^`, `=` não existem no modelo — limitação do
+  Tesseract, não é bug). O primeiro OCR carrega o motor (~1–2 s).
+  Veja o [ADR-0001](docs/adr/0001-limites-do-ocr.md) para a análise completa.
 
 ## Roadmap
 
