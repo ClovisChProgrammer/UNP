@@ -2,7 +2,7 @@
 
 [English](README.md) · [Português (BR)](README.pt-BR.md) · **Español**
 
-![Versión](https://img.shields.io/badge/versi%C3%B3n-0.5.0-blue)
+![Versión](https://img.shields.io/badge/versi%C3%B3n-0.5.1-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
 ![Sin conexión](https://img.shields.io/badge/100%25-sin%20conexi%C3%B3n-brightgreen)
@@ -97,7 +97,7 @@ extensión). Revisa siempre el resultado antes de usarlo.
 - El OCR se ejecuta en tu equipo con el motor Tesseract incluido — **ninguna imagen se sube**
 - El código es abierto — audítalo libremente
 
-## Limitaciones conocidas (v0.5)
+## Limitaciones conocidas (v0.5.1)
 
 - Al redimensionar el panel, el dibujo se mantiene sin distorsión en la esquina superior izquierda
 - La caja de texto es una capa sobre la parte inferior del lienzo (no divide la vista)

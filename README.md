@@ -2,7 +2,7 @@
 
 **English** · [Português (BR)](README.pt-BR.md) · [Español](README.es.md)
 
-![Version](https://img.shields.io/badge/version-0.5.0-blue)
+![Version](https://img.shields.io/badge/version-0.5.1-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -95,7 +95,7 @@ review the result before using it.
 - OCR runs on your machine with the bundled Tesseract engine — **no image is ever uploaded**
 - The code is open — audit freely
 
-## Known limitations (v0.5)
+## Known limitations (v0.5.1)
 
 - When the panel is resized, the drawing is kept undistorted in the top-left corner
 - The text box is an overlay on the lower part of the canvas (it does not split the view)

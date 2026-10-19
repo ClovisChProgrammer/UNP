@@ -2,7 +2,7 @@
 
 [English](README.md) · **Português (BR)** · [Español](README.es.md)
 
-![Versão](https://img.shields.io/badge/vers%C3%A3o-0.5.0-blue)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-0.5.1-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -95,7 +95,7 @@ extensão). Sempre revise o resultado antes de usar.
 - O OCR roda no seu computador com o motor Tesseract embutido — **nenhuma imagem é enviada**
 - O código é aberto — audite à vontade
 
-## Limitações conhecidas (v0.5)
+## Limitações conhecidas (v0.5.1)
 
 - Ao redimensionar o painel, o desenho fica no canto superior esquerdo sem distorção
 - A caixa de texto é uma "camada" sobre a parte inferior do desenho (não divide a tela)

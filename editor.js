@@ -3,7 +3,7 @@
 const ehPainel = window.location.pathname.endsWith("sidepanel.html");
 
 const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d", { alpha: false });
+const ctx = canvas.getContext("2d", { alpha: false, willReadFrequently: true });
 const statusEl = document.getElementById("status");
 const indicadorEl = document.getElementById("indicador");
 const textoEl = document.getElementById("texto");
