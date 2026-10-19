@@ -1,0 +1,5 @@
+# Vendor OCR assets are third-party binaries/data — never touch their bytes.
+*.wasm    binary
+*.wasm.js -text -diff
+*.gz      binary
+vendor/tesseract/*.js -text -diff
