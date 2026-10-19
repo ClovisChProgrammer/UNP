@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Ultimate Note Pad",
   "short_name": "UNT",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Bloco de rascunhos com caneta no side panel: notas rápidas e cálculos à mão, com export PNG/JPG.",
   "permissions": ["sidePanel", "storage"],
   "commands": {

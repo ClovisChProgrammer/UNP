@@ -2,7 +2,7 @@
 
 [English](README.md) · **Português (BR)** · [Español](README.es.md)
 
-![Versão](https://img.shields.io/badge/vers%C3%A3o-0.3.0-blue)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-0.4.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -31,6 +31,7 @@ coisa em 2 segundos, sem abrir outro programa.
 - **Caixa de texto** — botão *Texto* mostra uma área para datilografar notas (Ctrl+Z desfaz dentro dela)
 - **Ferramentas essenciais** — 3 cores, 2 espessuras, borracha, desfazer (`Ctrl+Z`) e limpar
 - **Export em 4 formatos** — `PNG`, `JPG`, `PDF` (página única) e `TXT` (o texto digitado), todos com um clique
+- **Rascunho salvo automaticamente** — o que você escreve ou digita fica guardado e volta ao reabrir o Chrome
 - **100% offline** — funciona sem internet; nenhum dado é coletado ou enviado
 
 ## Requisitos
@@ -64,6 +65,7 @@ coisa em 2 segundos, sem abrir outro programa.
 | Baixar o texto como TXT | Botão **TXT** |
 | Baixar o desenho como PDF | Botão **PDF** (página única) |
 | Baixar imagem | Botões **PNG** ou **JPG** |
+| Apagar o rascunho salvo | Botão **Apagar rascunho** (zera a tela e não volta sozinho) |
 
 **Tela cheia:** se o painel está aberto com um desenho (e/ou texto), ao entrar na aba o
 conteúdo é **copiado uma vez** para a tela cheia (aviso aparece no rodapé). Depois disso,
@@ -71,19 +73,24 @@ painel e aba seguem independentes — desenhar em um não altera o outro.
 
 O atalho `Ctrl+Shift+U` pode ser reconfigurado em `chrome://extensions/shortcuts`.
 
+**Salvamento automático:** o desenho e o texto são salvos sozinhos (com um pequeno
+atraso) e restaurados quando você reabre o painel ou o Chrome. Não há botão "Salvar" —
+escreva e esqueça. O botão **Apagar rascunho** limpa a tela **e** o que estava guardado.
+
 ## Privacidade
 
 - **Zero coleta de dados.** A extensão não envia nada para servidores — não há servidor
 - **100% offline.** Nenhuma permissão de rede, nenhum rastreamento, nenhum cookie
 - Permissões usadas: `sidePanel` (painel lateral) e `storage` (guardar preferências locais)
+- Seus rascunhos ficam **apenas no seu navegador** (`chrome.storage.local`) — nada vai para a nuvem
 - O código é aberto — audite à vontade
 
-## Limitações conhecidas (v0.3)
+## Limitações conhecidas (v0.4)
 
-- O desenho não é salvo entre sessões do Chrome (salvar rascunhos está no roadmap)
 - Ao redimensionar o painel, o desenho fica no canto superior esquerdo sem distorção
 - A caixa de texto é uma "camada" sobre a parte inferior do desenho (não divide a tela)
 - O PDF é uma página com a imagem do desenho (não selecionável)
+- Rascunhos muito grandes (acima de ~8 MB) não são salvos — exporte como imagem nesse caso
 - OCR (texto manuscrito → texto) ainda não disponível
 
 ## Roadmap
@@ -91,8 +98,8 @@ O atalho `Ctrl+Shift+U` pode ser reconfigurado em `chrome://extensions/shortcuts
 - [x] Painel lateral com caneta e pressão
 - [x] Tela cheia em aba (`Ctrl+Shift+U`)
 - [x] Export TXT e PDF
+- [x] Salvar rascunhos (automático, com restaurar ao reabrir)
 - [ ] OCR manuscrito → texto (processado localmente)
-- [ ] Salvar rascunhos entre sessões
 - [ ] Publicação na Chrome Web Store
 
 ## Licença

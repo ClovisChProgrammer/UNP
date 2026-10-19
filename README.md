@@ -2,7 +2,7 @@
 
 **English** · [Português (BR)](README.pt-BR.md) · [Español](README.es.md)
 
-![Version](https://img.shields.io/badge/version-0.3.0-blue)
+![Version](https://img.shields.io/badge/version-0.4.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Offline](https://img.shields.io/badge/100%25-offline-brightgreen)
@@ -31,6 +31,7 @@ jot something down in 2 seconds without opening another program.
 - **Text box** — the *Text* button reveals a typing area (Ctrl+Z undoes edits inside it)
 - **Essential tools** — 3 colors, 2 widths, eraser, undo (`Ctrl+Z`) and clear
 - **4 export formats** — `PNG`, `JPG`, `PDF` (single page) and `TXT` (typed text), one click each
+- **Auto-saved scratchpad** — whatever you draw or type is kept and restored when you reopen Chrome
 - **100% offline** — works without internet; nothing is collected or sent anywhere
 
 ## Requirements
@@ -64,6 +65,7 @@ jot something down in 2 seconds without opening another program.
 | Download text as TXT | **TXT** button |
 | Download drawing as PDF | **PDF** button (single page) |
 | Download image | **PNG** or **JPG** buttons |
+| Delete the saved draft | **Delete draft** button (clears the canvas and stays gone) |
 
 **Full screen:** if the panel holds a drawing (and/or text) when you open the tab, the
 content is **copied once** into the full-screen editor (a notice appears in the footer).
@@ -71,19 +73,24 @@ After that, panel and tab are independent — drawing in one does not change the
 
 The `Ctrl+Shift+U` shortcut can be remapped at `chrome://extensions/shortcuts`.
 
+**Auto-save:** your drawing and text are saved on their own (after a short delay) and
+restored when you reopen the panel or Chrome. There is no "Save" button — just write
+and forget. The **Delete draft** button clears the canvas **and** the stored draft.
+
 ## Privacy
 
 - **Zero data collection.** The extension sends nothing to any server — there is none
 - **100% offline.** No network permission, no tracking, no cookies
 - Permissions used: `sidePanel` (the panel) and `storage` (local preferences)
+- Your drafts live **only in your browser** (`chrome.storage.local`) — nothing goes to the cloud
 - The code is open — audit freely
 
-## Known limitations (v0.3)
+## Known limitations (v0.4)
 
-- Drawings are not persisted between Chrome sessions (saving is on the roadmap)
 - When the panel is resized, the drawing is kept undistorted in the top-left corner
 - The text box is an overlay on the lower part of the canvas (it does not split the view)
 - The PDF is a single page with the drawing as an image (not selectable text)
+- Very large drafts (above ~8 MB) are not saved — export as an image in that case
 - OCR (handwriting → text) is not available yet
 
 ## Roadmap
@@ -91,8 +98,8 @@ The `Ctrl+Shift+U` shortcut can be remapped at `chrome://extensions/shortcuts`.
 - [x] Side panel with pressure-sensitive pen input
 - [x] Full-screen tab mode (`Ctrl+Shift+U`)
 - [x] TXT and PDF export
+- [x] Auto-saved drafts (restored on reopen)
 - [ ] OCR handwriting → text (processed locally)
-- [ ] Persist drawings between sessions
 - [ ] Chrome Web Store publication
 
 ## Smoke checklist — step 2 (TXT + PDF export)
@@ -103,6 +110,16 @@ The `Ctrl+Shift+U` shortcut can be remapped at `chrome://extensions/shortcuts`.
 - [ ] PDF page size matches the editor (no cropping or distortion)
 - [ ] With an empty canvas, PDF shows "Nothing to export" (no file)
 - [ ] `npm test` passes (pdf generator unit tests)
+
+## Smoke checklist — step 4 (auto-saved drafts)
+
+- [ ] Draw something, close the panel, reopen it → the drawing comes back ("Draft restored")
+- [ ] Fully quit and relaunch Chrome → the draft is still there
+- [ ] Type text, reopen → text and its visibility are restored
+- [ ] Change color/width, reopen → the tool selection is restored
+- [ ] **Delete draft** clears canvas + text and stays empty after reopening
+- [ ] Draw in panel, open the tab → copy works; panel redraws persist independently
+- [ ] Undo and Clear are also auto-saved
 
 ## License
 

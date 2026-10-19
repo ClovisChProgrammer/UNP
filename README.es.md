@@ -2,7 +2,7 @@
 
 [English](README.md) · [Português (BR)](README.pt-BR.md) · **Español**
 
-![Versión](https://img.shields.io/badge/versi%C3%B3n-0.3.0-blue)
+![Versión](https://img.shields.io/badge/versi%C3%B3n-0.4.0-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-114%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
 ![Sin conexión](https://img.shields.io/badge/100%25-sin%20conexi%C3%B3n-brightgreen)
@@ -32,6 +32,7 @@ anotar algo en 2 segundos sin abrir otro programa.
 - **Caja de texto** — el botón *Texto* muestra un área para escribir a máquina (Ctrl+Z deshace dentro de ella)
 - **Herramientas esenciales** — 3 colores, 2 grosores, borrador, deshacer (`Ctrl+Z`) y limpiar
 - **4 formatos de exportación** — `PNG`, `JPG`, `PDF` (una página) y `TXT` (el texto escrito), con un clic cada uno
+- **Borrador guardado automáticamente** — lo que dibujas o escribes se conserva y vuelve al reabrir Chrome
 - **100% sin conexión** — funciona sin internet; no se recopila ni se envía nada
 
 ## Requisitos
@@ -66,6 +67,7 @@ anotar algo en 2 segundos sin abrir otro programa.
 | Descargar el texto como TXT | Botón **TXT** |
 | Descargar el dibujo como PDF | Botón **PDF** (una página) |
 | Descargar imagen | Botones **PNG** o **JPG** |
+| Borrar el borrador guardado | Botón **Borrar borrador** (limpia el lienzo y no vuelve solo) |
 
 **Pantalla completa:** si el panel tiene un dibujo (y/o texto) al abrir la pestaña, el
 contenido se **copia una vez** al editor en pantalla completa (aparece un aviso en el
@@ -73,19 +75,24 @@ pie). Después de eso, panel y pestaña son independientes — dibujar en uno no
 
 El atajo `Ctrl+Shift+U` se puede reconfigurar en `chrome://extensions/shortcuts`.
 
+**Guardado automático:** el dibujo y el texto se guardan solos (tras una pequeña espera)
+y se restauran al reabrir el panel o Chrome. No hay botón "Guardar" — escribe y olvídate.
+El botón **Borrar borrador** limpia el lienzo **y** lo que estaba guardado.
+
 ## Privacidad
 
 - **Cero recopilación de datos.** La extensión no envía nada a ningún servidor — no existe
 - **100% sin conexión.** Sin permiso de red, sin rastreo, sin cookies
 - Permisos usados: `sidePanel` (el panel) y `storage` (preferencias locales)
+- Tus borradores viven **solo en tu navegador** (`chrome.storage.local`) — nada va a la nube
 - El código es abierto — audítalo libremente
 
-## Limitaciones conocidas (v0.3)
+## Limitaciones conocidas (v0.4)
 
-- Los dibujos no se conservan entre sesiones de Chrome (guardar está en el roadmap)
 - Al redimensionar el panel, el dibujo se mantiene sin distorsión en la esquina superior izquierda
 - La caja de texto es una capa sobre la parte inferior del lienzo (no divide la vista)
 - El PDF es una página con el dibujo como imagen (no es texto seleccionable)
+- Los borradores muy grandes (más de ~8 MB) no se guardan — exporta como imagen en ese caso
 - El OCR (manuscrito → texto) aún no está disponible
 
 ## Roadmap
@@ -93,8 +100,8 @@ El atajo `Ctrl+Shift+U` se puede reconfigurar en `chrome://extensions/shortcuts`
 - [x] Panel lateral con lápiz sensible a la presión
 - [x] Modo pestaña a pantalla completa (`Ctrl+Shift+U`)
 - [x] Exportación TXT y PDF
+- [x] Borradores guardados automáticamente (se restauran al reabrir)
 - [ ] OCR manuscrito → texto (procesado localmente)
-- [ ] Guardar borradores entre sesiones
 - [ ] Publicación en Chrome Web Store
 
 ## Licencia

@@ -8,6 +8,7 @@ const statusEl = document.getElementById("status");
 const indicadorEl = document.getElementById("indicador");
 const textoEl = document.getElementById("texto");
 const btnTexto = document.getElementById("btn-texto");
+const btnApagar = document.getElementById("btn-apagar");
 
 const estado = {
   cor: "#1b1b1b",
@@ -163,10 +164,13 @@ function encerrarTraco(e) {
   estado.ponteiroAtual = null;
   estado.traçoAtual = null;
 
+  let mudou = false;
   if (traco && traco.pontos.length > 0) {
     estado.acoes.push(traco);
+    mudou = true;
   }
   setStatus("Pronto — escreva com a caneta");
+  if (mudou) agendarSalvar();
 }
 
 canvas.addEventListener("pointerup", encerrarTraco);
@@ -209,6 +213,7 @@ function desfazer() {
     return;
   }
   refazerTudo();
+  agendarSalvar();
   setStatus("Desfeito");
 }
 
@@ -218,6 +223,7 @@ document.getElementById("btn-limpar").addEventListener("click", () => {
   if (estado.acoes.length === 0) return;
   estado.acoes.push({ tipo: "limpar" });
   refazerTudo();
+  agendarSalvar();
   setStatus("Limpo — Ctrl+Z desfaz");
 });
 
@@ -318,19 +324,153 @@ function alternarTexto(mostrar) {
 }
 
 btnTexto.addEventListener("click", () => alternarTexto());
+textoEl.addEventListener("input", agendarSalvar);
 
 document.getElementById("btn-txt").addEventListener("click", baixarTxt);
 document.getElementById("btn-png").addEventListener("click", () => baixar("png", "image/png"));
 document.getElementById("btn-jpg").addEventListener("click", () => baixar("jpg", "image/jpeg", 0.92));
 document.getElementById("btn-pdf").addEventListener("click", baixarPdf);
 
-/* ---------- Painel ↔ aba (etapa 1) ---------- */
+/* ---------- Rascunhos salvos (etapa 4) ---------- */
+
+const CHAVE_RASCUNHO = "unt-rascunho";
+const LIMITE_BYTES = 8 * 1024 * 1024; // 8 MB — dentro da quota local da extensão
+
+let timerSalvar = null;
+let carregado = false;
+
+function serializarRascunho() {
+  return {
+    versao: 1,
+    salvoEm: Date.now(),
+    acoes: estado.acoes,
+    texto: textoEl.value,
+    ferramentas: { cor: estado.cor, espessura: estado.espessura },
+  };
+}
+
+function limparRascunhoSalvo() {
+  clearTimeout(timerSalvar);
+  carregado = false;
+  chrome.storage.local.remove(CHAVE_RASCUNHO).catch(() => {});
+  setStatus("Rascunho apagado");
+}
+
+function apagarRascunhoSalvo() {
+  const temConteudo = estado.acoes.length > 0 || textoEl.value.trim();
+  if (temConteudo && !window.confirm("Apagar o rascunho salvo e limpar a tela?")) return;
+  clearTimeout(timerSalvar);
+  carregado = false;
+  estado.acoes = [];
+  refazerTudo();
+  textoEl.value = "";
+  if (!textoEl.classList.contains("oculto")) alternarTexto(false);
+  chrome.storage.local.remove(CHAVE_RASCUNHO).catch(() => {});
+  setStatus("Rascunho apagado");
+}
+
+btnApagar.addEventListener("click", apagarRascunhoSalvo);
+
+async function salvarRascunho() {
+  if (!carregado) return;
+  clearTimeout(timerSalvar);
+  if (estado.acoes.length === 0 && !textoEl.value.trim()) {
+    limparRascunhoSalvo();
+    return;
+  }
+  const dados = serializarRascunho();
+  const tamanho = JSON.stringify(dados).length;
+  if (tamanho > LIMITE_BYTES) {
+    setStatus("Rascunho grande demais para salvar — exporte como imagem");
+    return;
+  }
+  try {
+    await chrome.storage.local.set({ [CHAVE_RASCUNHO]: dados });
+  } catch (erro) {
+    console.error(erro);
+    setStatus("Falha ao salvar o rascunho (armazenamento cheio?)");
+  }
+}
+
+function agendarSalvar() {
+  if (!carregado) return;
+  clearTimeout(timerSalvar);
+  timerSalvar = setTimeout(salvarRascunho, 700);
+}
+
+async function restaurarRascunho() {
+  let dados;
+  try {
+    const resultado = await chrome.storage.local.get(CHAVE_RASCUNHO);
+    dados = resultado[CHAVE_RASCUNHO];
+  } catch {
+    dados = null;
+  }
+  if (dados && Array.isArray(dados.acoes) && dados.acoes.length > 0) {
+    estado.acoes = dados.acoes;
+    refazerTudo();
+    setStatus("Rascunho restaurado");
+  }
+  if (dados && typeof dados.texto === "string" && dados.texto.trim()) {
+    textoEl.value = dados.texto;
+    alternarTexto(true);
+    setStatus("Rascunho restaurado");
+  }
+  if (dados && dados.ferramentas) {
+    if (typeof dados.ferramentas.cor === "string") {
+      estado.cor = dados.ferramentas.cor;
+      document.querySelectorAll(".cor").forEach((b) => b.classList.toggle("ativa", b.dataset.cor === estado.cor));
+    }
+    if (typeof dados.ferramentas.espessura === "number") {
+      estado.espessura = dados.ferramentas.espessura;
+      document.querySelectorAll(".espessura").forEach((b) => b.classList.toggle("ativa", parseFloat(b.dataset.esp) === estado.espessura));
+    }
+    atualizarIndicador();
+  }
+  carregado = true;
+  return dados;
+}
+
+let epochSalvar = 0;
+function tratarRestaurado(epoch) {
+  if (!carregado) {
+    carregado = true;
+    if (epochSalvar === 0) setStatus("Pronto — a caneta escreve e o rascunho fica salvo");
+    return;
+  }
+  if (epoch > epochSalvar) {
+    salvarRascunho();
+    epochSalvar = epoch;
+  }
+}
+
+function inicializarSalvamento() {
+  if (!ehPainel) return;
+  chrome.storage.local
+    .get(CHAVE_RASCUNHO)
+    .then(() => {
+      restaurarRascunho();
+      tratarRestaurado(0);
+    })
+    .catch(() => {
+      carregado = true;
+    });
+}
+
+/* ---------- Painel ↔ aba (etapas 1 e 4) ---------- */
 
 if (ehPainel) {
   chrome.runtime.onMessage.addListener((mensagem, _remetente, responder) => {
     if (mensagem?.tipo === "unt-pedir-estado") {
       responder({ acoes: estado.acoes, texto: textoEl.value });
       return true;
+    }
+  });
+
+  chrome.storage.onChanged.addListener((mudancas, area) => {
+    if (area === "local" && mudancas[CHAVE_RASCUNHO]) {
+      const novo = mudancas[CHAVE_RASCUNHO].newValue;
+      if (novo?.salvoEm) epochSalvar = Math.max(epochSalvar, novo.salvoEm);
     }
   });
 
@@ -344,25 +484,31 @@ if (ehPainel) {
   chrome.runtime.sendMessage({ tipo: "unt-aba-viva" }).catch(() => {});
   chrome.storage.session
     .get("unt-estado-transferido")
-    .then((dados) => {
+    .then(async (dados) => {
       const bruto = dados["unt-estado-transferido"];
-      if (!bruto) return;
-      const transferido = Array.isArray(bruto) ? { acoes: bruto, texto: "" } : bruto;
-      let copiou = false;
-      if (Array.isArray(transferido.acoes) && transferido.acoes.length > 0) {
-        estado.acoes = transferido.acoes;
-        refazerTudo();
-        copiou = true;
+      if (bruto) {
+        const transferido = Array.isArray(bruto) ? { acoes: bruto, texto: "" } : bruto;
+        let copiou = false;
+        if (Array.isArray(transferido.acoes) && transferido.acoes.length > 0) {
+          estado.acoes = transferido.acoes;
+          refazerTudo();
+          copiou = true;
+        }
+        if (typeof transferido.texto === "string" && transferido.texto.trim()) {
+          textoEl.value = transferido.texto;
+          alternarTexto(true);
+          copiou = true;
+        }
+        if (copiou) {
+          setStatus("Rascunho copiado do painel — painel e aba seguem independentes");
+        }
+        await chrome.storage.session.remove("unt-estado-transferido");
+        await salvarRascunho();
+        tratarRestaurado(Date.now());
+      } else {
+        await restaurarRascunho();
+        tratarRestaurado(0);
       }
-      if (typeof transferido.texto === "string" && transferido.texto.trim()) {
-        textoEl.value = transferido.texto;
-        alternarTexto(true);
-        copiou = true;
-      }
-      if (copiou) {
-        setStatus("Rascunho copiado do painel — painel e aba seguem independentes");
-      }
-      return chrome.storage.session.remove("unt-estado-transferido");
     })
     .catch(() => {});
 }
@@ -372,3 +518,4 @@ if (ehPainel) {
 new ResizeObserver(() => dimensionar()).observe(canvas.parentElement);
 dimensionar();
 atualizarIndicador();
+inicializarSalvamento();
