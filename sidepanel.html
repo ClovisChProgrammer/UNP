@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ultimate Note Pad</title>
-  <link rel="stylesheet" href="sidepanel.css" />
+  <link rel="stylesheet" href="editor.css" />
 </head>
 <body>
   <header class="barra">
     <span class="marca">UNT</span>
     <div class="acoes">
+      <button id="btn-aba" class="btn-export" title="Abrir em aba (tela cheia) — Ctrl+Shift+U">↗ Tela cheia</button>
       <button id="btn-png" class="btn-export" title="Baixar como PNG">PNG</button>
       <button id="btn-jpg" class="btn-export" title="Baixar como JPG">JPG</button>
     </div>
@@ -43,6 +44,6 @@
     <span id="indicador"></span>
   </footer>
 
-  <script src="sidepanel.js"></script>
+  <script src="editor.js"></script>
 </body>
 </html>

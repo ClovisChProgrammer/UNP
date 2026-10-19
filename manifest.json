@@ -2,9 +2,15 @@
   "manifest_version": 3,
   "name": "Ultimate Note Pad",
   "short_name": "UNT",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bloco de rascunhos com caneta no side panel: notas rápidas e cálculos à mão, com export PNG/JPG.",
-  "permissions": ["sidePanel"],
+  "permissions": ["sidePanel", "storage"],
+  "commands": {
+    "abrir-aba": {
+      "suggested_key": { "default": "Ctrl+Shift+U", "mac": "Command+Shift+U" },
+      "description": "Abrir o editor UNT em aba (tela cheia)"
+    }
+  },
   "background": {
     "service_worker": "background.js"
   },

@@ -1,5 +1,7 @@
 "use strict";
 
+const ehPainel = window.location.pathname.endsWith("sidepanel.html");
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d", { alpha: false });
 const statusEl = document.getElementById("status");
@@ -262,6 +264,38 @@ function baixar(extensao, mime, qualidade) {
 
 document.getElementById("btn-png").addEventListener("click", () => baixar("png", "image/png"));
 document.getElementById("btn-jpg").addEventListener("click", () => baixar("jpg", "image/jpeg", 0.92));
+
+/* ---------- Painel ↔ aba (etapa 1) ---------- */
+
+if (ehPainel) {
+  chrome.runtime.onMessage.addListener((mensagem, _remetente, responder) => {
+    if (mensagem?.tipo === "unt-pedir-estado") {
+      responder({ acoes: estado.acoes });
+      return true;
+    }
+  });
+
+  const btnAba = document.getElementById("btn-aba");
+  if (btnAba) {
+    btnAba.addEventListener("click", () => {
+      chrome.runtime.sendMessage({ tipo: "unt-abrir-aba" }).catch(() => {});
+    });
+  }
+} else {
+  chrome.runtime.sendMessage({ tipo: "unt-aba-viva" }).catch(() => {});
+  chrome.storage.session
+    .get("unt-estado-transferido")
+    .then((dados) => {
+      const acoes = dados["unt-estado-transferido"];
+      if (Array.isArray(acoes) && acoes.length > 0) {
+        estado.acoes = acoes;
+        refazerTudo();
+        setStatus("Rascunho copiado do painel — painel e aba seguem independentes");
+      }
+      if (acoes) return chrome.storage.session.remove("unt-estado-transferido");
+    })
+    .catch(() => {});
+}
 
 /* ---------- Início ---------- */
 
